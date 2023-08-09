@@ -17,7 +17,7 @@ class LivroController {
             const livroResultado = await livros.findById(id)
             res.status(200).json(livroResultado)
         } catch (error) {
-            res.status(500).send(error)
+            res.status(500).send({message: `${error.message} - id do livro não encontrado.`})
         }
     }
 
@@ -43,15 +43,16 @@ class LivroController {
         }
     }
 
-    // static excluirLivro = async (req, res) => {      
-    //     const id = req.params.id
+    static excluirLivro = async (req, res) => {      
+        const id = req.params.id
         
-    //     try {
-            
-    //     } catch (error) {
-
-    //     }
-    // }
+        try {
+            await livros.findByIdAndDelete(id)
+            res.status(200).send({message: 'O livro foi excluido com sucesso.'})
+        } catch (error) {
+            res.status(500).send({message: error.message})
+        }
+    }
 }
 
 export default LivroController
