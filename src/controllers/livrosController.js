@@ -4,6 +4,8 @@ class LivroController {
     static listarLivros = async (req, res) => {
         try {
             const livrosResultado = await livros.find()
+                .populate('autor')
+                .populate('editora')
             res.status(200).json(livrosResultado)
         } catch (error) {
             res.status(500).json(error)
@@ -15,6 +17,8 @@ class LivroController {
         
         try {
             const livroResultado = await livros.findById(id)
+                .populate('autor', 'nome')
+                .populate('editora', 'nome')
             res.status(200).json(livroResultado)
         } catch (error) {
             res.status(500).send({message: `${error.message} - id do livro não encontrado.`})
@@ -51,6 +55,17 @@ class LivroController {
             res.status(200).send({message: 'O livro foi excluido com sucesso.'})
         } catch (error) {
             res.status(500).send({message: error.message})
+        }
+    }
+
+    static listarLivrosPorEditora = async (req, res) => {
+        try {
+            const editora = req.query.editora
+
+            const livrosResultado = await livros.find({'editora': editora}, {})
+            res.status(200).json(livrosResultado)
+        } catch (error) {
+            
         }
     }
 }
